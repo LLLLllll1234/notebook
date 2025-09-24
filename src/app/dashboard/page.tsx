@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { formatDate } from '@/lib/utils'
-import { Plus, Edit, Calendar, Tag } from 'lucide-react'
+import { Plus, Edit, Calendar, Tag, Upload, Download, FileText } from 'lucide-react'
 
 export default async function DashboardPage() {
   const posts = await prisma.post.findMany({
@@ -32,13 +32,23 @@ export default async function DashboardPage() {
           </p>
         </div>
         
-        <Link
-          href="/dashboard/new"
-          className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-        >
-          <Plus className="h-4 w-4" />
-          <span>新建笔记</span>
-        </Link>
+        <div className="flex items-center space-x-3">
+          <Link
+            href="/dashboard/import-export"
+            className="inline-flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            <FileText className="h-4 w-4" />
+            <span>导入导出</span>
+          </Link>
+          
+          <Link
+            href="/dashboard/new"
+            className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            <span>新建笔记</span>
+          </Link>
+        </div>
       </div>
 
       {/* Statistics */}

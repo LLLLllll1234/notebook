@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { PostForm } from '@/components/PostForm'
 import { DeletePostButton } from '@/components/DeletePostButton'
 import { updatePost, deletePost } from '@/lib/actions'
+import { Toaster } from 'react-hot-toast'
 
 interface EditPostPageProps {
   params: {
@@ -31,14 +32,16 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   const initialData = {
     title: post.title,
     content: post.content,
-    tags: post.tags.map((tagOnPost: any) => tagOnPost.tag.name).join(', ')
+    tags: post.tags.map((tagOnPost: any) => tagOnPost.tag.name).join(', '),
+    id: post.id
   }
 
   const updatePostWithId = updatePost.bind(null, post.id)
   const deletePostWithId = deletePost.bind(null, post.id)
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
+      <Toaster position="top-right" />
       <div className="mb-8">
         <Link
           href="/dashboard"
@@ -50,12 +53,9 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
               编辑笔记
             </h1>
-            <p className="text-zinc-600 dark:text-zinc-400 mt-2">
-              修改你的学习笔记内容
-            </p>
           </div>
 
           <DeletePostButton action={deletePostWithId} />

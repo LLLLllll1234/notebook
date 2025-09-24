@@ -6,11 +6,18 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function generateSlug(title: string): string {
-  return title
+  const slug = title
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/[^\w\s\u4e00-\u9fff-]/g, '') // Keep Chinese characters and basic characters
     .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
     .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
+  
+  // If slug is empty or only hyphens, use a fallback
+  if (!slug || slug === '' || /^-+$/.test(slug)) {
+    return 'untitled-' + Date.now()
+  }
+  
+  return slug
 }
 
 export function extractContent(content: string, maxLength: number = 150): string {

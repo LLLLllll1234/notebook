@@ -18,6 +18,7 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   tags      TagOnPost[]
+  attachments Attachment[]
 
   @@map("posts")
 }
@@ -38,4 +39,31 @@ model TagOnPost {
 
   @@id([postId, tagId])
   @@map("tag_on_post")
+}
+
+model Attachment {
+  id           String   @id @default(cuid())
+  originalName String
+  fileName     String   @unique
+  filePath     String
+  fileSize     Int
+  mimeType     String
+  postId       String?
+  uploadedAt   DateTime @default(now())
+  post         Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("attachments")
+}
+
+model ImportExportRecord {
+  id           String   @id @default(cuid())
+  type         String   // 'import' or 'export'
+  format       String   // 'md', 'json', 'zip', 'pdf'
+  fileName     String
+  status       String   // 'pending', 'processing', 'completed', 'failed'
+  itemCount    Int?
+  errorMessage String?
+  createdAt    DateTime @default(now())
+
+  @@map("import_export_records")
 }

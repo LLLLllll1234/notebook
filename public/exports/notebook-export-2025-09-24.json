@@ -1,0 +1,35 @@
+{
+  "exportInfo": {
+    "version": "1.0",
+    "exportDate": "2025-09-24T17:26:11.894Z",
+    "itemCount": 2
+  },
+  "posts": [
+    {
+      "id": "cmfy89mcb0005rmwiowvp76rh",
+      "title": "React Hooks 使用指南",
+      "slug": "react-hooks-guide",
+      "content": "# React Hooks 使用指南\n\nReact Hooks 是 React 16.8 引入的新特性，让我们可以在函数组件中使用状态和其他 React 特性。\n\n## useState Hook\n\n最常用的 Hook，用于在函数组件中添加状态：\n\n```javascript\nimport React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}\n```\n\n## useEffect Hook\n\n用于执行副作用操作，如数据获取、订阅或手动更改 DOM：\n\n```javascript\nimport React, { useState, useEffect } from 'react';\n\nfunction Example() {\n  const [count, setCount] = useState(0);\n\n  useEffect(() => {\n    document.title = `You clicked ${count} times`;\n  });\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}\n```\n\n## 自定义 Hook\n\n你可以创建自己的 Hook 来复用状态逻辑：\n\n```javascript\nfunction useCounter(initialValue = 0) {\n  const [count, setCount] = useState(initialValue);\n  \n  const increment = () => setCount(count + 1);\n  const decrement = () => setCount(count - 1);\n  const reset = () => setCount(initialValue);\n  \n  return { count, increment, decrement, reset };\n}\n```\n\nHooks 让 React 组件更加简洁和可复用！",
+      "tags": [
+        "JavaScript",
+        "React",
+        "前端开发"
+      ],
+      "createdAt": "2025-09-24T16:58:00.923Z",
+      "updatedAt": "2025-09-24T16:58:00.923Z"
+    },
+    {
+      "id": "cmfy89mc90004rmwiyjr2ustm",
+      "title": "JavaScript 基础知识总结",
+      "slug": "javascript-basics-summary",
+      "content": "# JavaScript 基础知识总结\n\n## 变量和数据类型\n\nJavaScript 有以下几种基本数据类型：\n\n- **String**: 字符串类型\n- **Number**: 数字类型 \n- **Boolean**: 布尔类型\n- **Undefined**: 未定义类型\n- **Null**: 空值类型\n- **Symbol**: 符号类型 (ES6+)\n- **BigInt**: 大整数类型 (ES2020+)\n\n## 函数\n\n### 函数声明\n```javascript\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\n```\n\n### 箭头函数\n```javascript\nconst greet = (name) => `Hello, ${name}!`;\n```\n\n## 对象和数组\n\n### 对象\n```javascript\nconst person = {\n  name: 'John',\n  age: 30,\n  city: 'New York'\n};\n```\n\n### 数组\n```javascript\nconst fruits = ['apple', 'banana', 'orange'];\n```\n\n## ES6+ 特性\n\n- **解构赋值**: 从对象或数组中提取值\n- **模板字符串**: 使用反引号创建字符串\n- **Promise**: 处理异步操作\n- **async/await**: 更简洁的异步代码写法\n\n这些是JavaScript的基础知识，掌握这些概念对于前端开发非常重要。",
+      "tags": [
+        "JavaScript",
+        "学习笔记",
+        "前端开发"
+      ],
+      "createdAt": "2025-09-24T16:58:00.922Z",
+      "updatedAt": "2025-09-24T16:58:00.922Z"
+    }
+  ]
+}

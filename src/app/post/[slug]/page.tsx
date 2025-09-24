@@ -2,8 +2,9 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { MarkdownRenderer } from '@/components/MarkdownRenderer'
+import { AttachmentManager } from '@/components/AttachmentManager'
 import { formatDate } from '@/lib/utils'
-import { Calendar, Tag, ArrowLeft, Edit } from 'lucide-react'
+import { Calendar, Tag, ArrowLeft, Edit, Paperclip } from 'lucide-react'
 
 interface PostPageProps {
   params: {
@@ -37,7 +38,8 @@ export default async function PostPage({ params }: PostPageProps) {
         include: {
           tag: true
         }
-      }
+      },
+      attachments: true
     }
   })
 
@@ -98,6 +100,30 @@ export default async function PostPage({ params }: PostPageProps) {
       <article className="prose prose-zinc dark:prose-invert max-w-none">
         <MarkdownRenderer content={post.content} />
       </article>
+
+      {/* Attachments Section */}
+      {post.attachments && post.attachments.length > 0 && (
+        <div className="mt-8">
+          <div className="flex items-center space-x-2 mb-4">
+            <Paperclip className="h-5 w-5 text-gray-500" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+              附件
+            </h3>
+          </div>
+          <AttachmentManager
+            attachments={post.attachments.map(att => ({
+              id: att.id,
+              originalName: att.originalName,
+              fileName: att.fileName,
+              filePath: att.filePath,
+              fileSize: att.fileSize,
+              mimeType: att.mimeType,
+              uploadedAt: att.uploadedAt
+            }))}
+            showActions={false}
+          />
+        </div>
+      )}
 
       <div className="mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-700">
         <div className="flex items-center justify-between">
