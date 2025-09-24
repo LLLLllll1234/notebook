@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Trash2 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { PostForm } from '@/components/PostForm'
+import { DeletePostButton } from '@/components/DeletePostButton'
 import { updatePost, deletePost } from '@/lib/actions'
 
 interface EditPostPageProps {
@@ -30,7 +31,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   const initialData = {
     title: post.title,
     content: post.content,
-    tags: post.tags.map(tagOnPost => tagOnPost.tag.name).join(', ')
+    tags: post.tags.map((tagOnPost: any) => tagOnPost.tag.name).join(', ')
   }
 
   const updatePostWithId = updatePost.bind(null, post.id)
@@ -57,20 +58,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
             </p>
           </div>
 
-          <form action={deletePostWithId}>
-            <button
-              type="submit"
-              onClick={(e) => {
-                if (!confirm('确定要删除这篇笔记吗？此操作不可撤销。')) {
-                  e.preventDefault()
-                }
-              }}
-              className="inline-flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-            >
-              <Trash2 className="h-4 w-4" />
-              <span>删除</span>
-            </button>
-          </form>
+          <DeletePostButton action={deletePostWithId} />
         </div>
       </div>
 
