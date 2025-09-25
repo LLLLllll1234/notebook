@@ -41,8 +41,14 @@ export function validateFile(file: File) {
 
   // Check file type
   const allowedTypes = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_DOCUMENT_TYPES]
+  
+  // Special handling for markdown files
+  if (file.name.toLowerCase().endsWith('.md')) {
+    return { valid: true }
+  }
+  
   if (!allowedTypes.includes(file.type)) {
-    return { valid: false, error: '不支持的文件类型' }
+    return { valid: false, error: `不支持的文件类型: ${file.type}` }
   }
 
   return { valid: true }

@@ -59,8 +59,11 @@ export type ImportResponse = {
 export type ExportResponse = {
   success: boolean
   data?: {
+    recordId: string
     downloadUrl: string
     fileName: string
+    itemCount: number
+    message: string
   }
   error?: string
 }

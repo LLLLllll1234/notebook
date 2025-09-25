@@ -6,15 +6,30 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function generateSlug(title: string): string {
-  const slug = title
+  // Create a more URL-friendly slug
+  let slug = title
     .toLowerCase()
-    .replace(/[^\w\s\u4e00-\u9fff-]/g, '') // Keep Chinese characters and basic characters
-    .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
-    .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
+    .trim()
+    // Replace Chinese characters with pinyin-like equivalents or remove them
+    .replace(/[\u4e00-\u9fff]/g, '') // Remove Chinese characters for now
+    // Keep only alphanumeric characters, spaces, and hyphens
+    .replace(/[^a-z0-9\s-]/g, '')
+    // Replace multiple spaces with single hyphens
+    .replace(/\s+/g, '-')
+    // Replace multiple hyphens with single hyphen
+    .replace(/-+/g, '-')
+    // Remove leading/trailing hyphens
+    .replace(/^-+|-+$/g, '')
   
-  // If slug is empty or only hyphens, use a fallback
-  if (!slug || slug === '' || /^-+$/.test(slug)) {
-    return 'untitled-' + Date.now()
+  // If slug is empty after cleaning, create a fallback
+  if (!slug || slug.length === 0) {
+    // Use current timestamp for unique identifier
+    slug = 'post-' + Date.now().toString(36)
+  }
+  
+  // Ensure slug is not too long
+  if (slug.length > 50) {
+    slug = slug.substring(0, 50).replace(/-+$/, '')
   }
   
   return slug

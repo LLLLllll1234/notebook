@@ -5,6 +5,7 @@ import { Save, Eye, EyeOff, Paperclip } from 'lucide-react'
 import { MarkdownRenderer } from './MarkdownRenderer'
 import { FileUpload } from './FileUpload'
 import { AttachmentManager } from './AttachmentManager'
+import { MarkdownUpload } from './MarkdownUpload'
 import { AttachmentData } from '@/lib/types'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast, { Toaster } from 'react-hot-toast'
@@ -26,6 +27,7 @@ export function PostForm({ action, initialData }: PostFormProps) {
   const [isPreview, setIsPreview] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showAttachments, setShowAttachments] = useState(false)
+  const [showMarkdownUpload, setShowMarkdownUpload] = useState(false)
   const [attachments, setAttachments] = useState<AttachmentData[]>([])
 
   const handleSubmit = async (formData: FormData) => {
@@ -54,6 +56,20 @@ export function PostForm({ action, initialData }: PostFormProps) {
 
   const handleAttachmentDeleted = (id: string) => {
     setAttachments(prev => prev.filter(att => att.id !== id))
+  }
+
+  const handleMarkdownFileProcessed = (data: { title: string; content: string; tags?: string }) => {
+    // Auto-fill form with markdown data
+    if (data.title && !title.trim()) {
+      setTitle(data.title)
+    }
+    if (data.content) {
+      setContent(prev => prev + (prev ? '\n\n' : '') + data.content)
+    }
+    if (data.tags && !tags.trim()) {
+      setTags(data.tags)
+    }
+    toast.success('Markdown 文件内容已导入到表单')
   }
 
   return (
@@ -109,6 +125,15 @@ export function PostForm({ action, initialData }: PostFormProps) {
             <div className="flex items-center space-x-2">
               <button
                 type="button"
+                onClick={() => setShowMarkdownUpload(!showMarkdownUpload)}
+                className="inline-flex items-center space-x-1 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 transition-colors px-2 py-1 rounded border border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+              >
+                <span>📁</span>
+                <span>导入 MD 文件</span>
+              </button>
+              
+              <button
+                type="button"
                 onClick={() => setShowAttachments(!showAttachments)}
                 className="inline-flex items-center space-x-1 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors px-2 py-1 rounded"
               >
@@ -135,6 +160,26 @@ export function PostForm({ action, initialData }: PostFormProps) {
               </button>
             </div>
           </div>
+
+          {/* Markdown Upload Section */}
+          <AnimatePresence>
+            {showMarkdownUpload && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-4 p-4 border border-blue-200 dark:border-blue-700 rounded-lg bg-blue-50 dark:bg-blue-900/20"
+              >
+                <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-3">
+                  导入 Markdown 文件
+                </h3>
+                <MarkdownUpload
+                  onFileProcessed={handleMarkdownFileProcessed}
+                  onError={(error) => toast.error(error)}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* File Upload Section */}
           <AnimatePresence>

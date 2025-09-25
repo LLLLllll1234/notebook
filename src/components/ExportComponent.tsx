@@ -21,17 +21,9 @@ interface ExportOptions {
   }
 }
 
-interface ExportResult {
-  recordId: string
-  downloadUrl: string
-  fileName: string
-  itemCount: number
-  message: string
-}
-
 export function ExportComponent({ availableTags = [], className = '' }: ExportComponentProps) {
   const [isExporting, setIsExporting] = useState(false)
-  const [exportResult, setExportResult] = useState<ExportResult | null>(null)
+  const [exportResult, setExportResult] = useState<NonNullable<ExportResponse['data']> | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [showAdvanced, setShowAdvanced] = useState(false)
   
