@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState, useRef } from 'react'
-import { TOCItem } from '@/lib/types'
+import { TOCItem } from '@/lib/types/types'
 import { List, ChevronRight, ChevronDown, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import slugify from 'slugify'

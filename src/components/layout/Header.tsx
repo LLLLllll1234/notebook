@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useTheme } from './ThemeProvider'
+import { useTheme } from '@/components/ui'
 import { Moon, Sun, PenTool, Settings } from 'lucide-react'
 
 export function Header() {

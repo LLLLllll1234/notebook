@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { File, Image, FileText, Download, Trash2, ExternalLink } from 'lucide-react'
-import { AttachmentData } from '@/lib/types'
+import { AttachmentData } from '@/lib/types/types'
 import toast from 'react-hot-toast'
 
 interface AttachmentManagerProps {

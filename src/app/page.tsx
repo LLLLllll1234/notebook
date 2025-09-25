@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
-import { PostList } from '@/components/PostList'
-import { SearchBar } from '@/components/SearchBar'
+import { PostList } from '@/components/post'
+import { SearchBar } from '@/components/ui'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
 

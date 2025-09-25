@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import { ImportComponent } from '@/components/ImportComponent'
-import { ExportComponent } from '@/components/ExportComponent'
+import { ImportComponent } from '@/components/import-export'
+import { ExportComponent } from '@/components/import-export'
 import { prisma } from '@/lib/prisma'
 import { Upload, Download, FileText } from 'lucide-react'
 

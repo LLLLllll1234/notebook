@@ -6,7 +6,7 @@ import { useSelectionStore } from '@/lib/stores'
 import { BulkDeleteDialog } from './BulkDeleteDialog'
 import { BulkTagDialog } from './BulkTagDialog'
 import { BulkExportDialog } from './BulkExportDialog'
-import { PostWithTags } from '@/lib/types'
+import { PostWithTags } from '@/lib/types/types'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
 

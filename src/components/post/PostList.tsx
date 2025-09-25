@@ -1,7 +1,7 @@
 'use client'
 
-import { PostWithTags } from '@/lib/types'
-import { formatDate, extractContent } from '@/lib/utils'
+import { PostWithTags } from '@/lib/types/types'
+import { formatDate, extractContent } from '@/lib/utils/utils'
 import { Calendar, Tag, CheckSquare, Square } from 'lucide-react'
 import Link from 'next/link'
 import { useSelectionStore } from '@/lib/stores'

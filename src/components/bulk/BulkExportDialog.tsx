@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Dialog, DialogContent } from '@radix-ui/react-dialog'
 import { useSelectionStore } from '@/lib/stores'
-import { BulkOperationRequest, BulkOperationResponse } from '@/lib/types'
+import { BulkOperationRequest, BulkOperationResponse } from '@/lib/types/types'
 import { Download, X, FileText, Archive, Database } from 'lucide-react'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'

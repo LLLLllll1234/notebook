@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { PostForm } from '@/components/PostForm'
+import { PostForm } from '@/components/post'
 import { createPost } from '@/lib/actions'
 import { Toaster } from 'react-hot-toast'
 

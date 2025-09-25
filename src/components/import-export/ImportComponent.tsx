@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Upload, FileText, Download, CheckCircle, AlertCircle, X, Info } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ImportResponse } from '@/lib/types'
+import { ImportResponse } from '@/lib/types/types'
 import toast from 'react-hot-toast'
 
 interface ImportComponentProps {

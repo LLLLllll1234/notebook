@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils/utils'
 import { Plus, Edit, Calendar, Tag, Upload, Download, FileText } from 'lucide-react'
-import { PostList } from '@/components/PostList'
-import { BulkOperationToolbar } from '@/components/BulkOperationToolbar'
-import { PostWithTags } from '@/lib/types'
+import { PostList } from '@/components/post'
+import { BulkOperationToolbar } from '@/components/bulk'
+import { PostWithTags } from '@/lib/types/types'
 import { useSelectionStore } from '@/lib/stores'
 import toast, { Toaster } from 'react-hot-toast'
 

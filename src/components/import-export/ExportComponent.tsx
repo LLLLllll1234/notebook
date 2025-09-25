@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Download, FileText, Package, Calendar, Tag, Settings, CheckCircle, AlertCircle, X } from 'lucide-react'
-import { ExportResponse } from '@/lib/types'
+import { ExportResponse } from '@/lib/types/types'
 import toast from 'react-hot-toast'
 
 interface ExportComponentProps {

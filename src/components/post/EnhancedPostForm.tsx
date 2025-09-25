@@ -7,10 +7,10 @@ import {
   Quote, Minus, Table, Eye, EyeOff, Type, AlignLeft, Maximize2,
   Save, Paperclip, RotateCcw, RotateCw, Search
 } from 'lucide-react'
-import { MarkdownRenderer } from './MarkdownRenderer'
-import { FileUpload } from './FileUpload'
+import { MarkdownRenderer } from '@/components/editor'
+import { FileUpload } from '@/components/ui'
 import { AttachmentManager } from './AttachmentManager'
-import { AttachmentData } from '@/lib/types'
+import { AttachmentData } from '@/lib/types/types'
 import toast from 'react-hot-toast'
 
 interface EnhancedPostFormProps {

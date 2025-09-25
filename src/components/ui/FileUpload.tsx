@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Upload, File, Image, FileText, X, CheckCircle, AlertCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { UploadResponse, AttachmentData } from '@/lib/types'
+import { UploadResponse, AttachmentData } from '@/lib/types/types'
 import toast from 'react-hot-toast'
 
 interface FileUploadProps {

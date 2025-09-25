@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { Save, Paperclip } from 'lucide-react'
-import { EnhancedEditor } from './EnhancedEditor'
-import { FileUpload } from './FileUpload'
+import { EnhancedEditor } from '@/components/editor'
+import { FileUpload } from '@/components/ui'
 import { AttachmentManager } from './AttachmentManager'
-import { MarkdownUpload } from './MarkdownUpload'
-import { AttachmentData } from '@/lib/types'
+import { MarkdownUpload } from '@/components/import-export'
+import { AttachmentData } from '@/lib/types/types'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast, { Toaster } from 'react-hot-toast'
 
