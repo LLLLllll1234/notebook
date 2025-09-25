@@ -31,6 +31,10 @@ export type Attachment = {
   mimeType: string
   postId: string | null
   uploadedAt: Date
+  thumbnailPath?: string | null
+  thumbnailFileName?: string | null
+  compressedSize?: number | null
+  dimensions?: string | null
   post?: Post | null
 }
 
@@ -106,6 +110,15 @@ export type AttachmentData = {
   fileSize: number
   mimeType: string
   uploadedAt: Date
+  thumbnailPath?: string
+  thumbnailFileName?: string
+  compressedSize?: number
+  dimensions?: {
+    width: number
+    height: number
+  }
+  compressionRatio?: number
+  isDuplicate?: boolean
 }
 
 export type ImportExportData = {

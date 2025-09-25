@@ -44,15 +44,19 @@ model TagOnPost {
 }
 
 model Attachment {
-  id           String   @id @default(cuid())
-  originalName String
-  fileName     String   @unique
-  filePath     String
-  fileSize     Int
-  mimeType     String
-  postId       String?
-  uploadedAt   DateTime @default(now())
-  post         Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  id                String   @id @default(cuid())
+  originalName      String
+  fileName          String   @unique
+  filePath          String
+  fileSize          Int
+  mimeType          String
+  postId            String?
+  uploadedAt        DateTime @default(now())
+  thumbnailPath     String?  // 缩略图路径
+  thumbnailFileName String?  // 缩略图文件名
+  compressedSize    Int?     // 压缩后大小
+  dimensions        String?  // 图片尺寸信息(JSON格式)
+  post              Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@map("attachments")
 }

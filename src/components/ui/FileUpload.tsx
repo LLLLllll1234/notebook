@@ -212,7 +212,7 @@ export function FileUpload({
               {(isDragActive || dropzoneActive) ? '放下文件以上传' : '拖拽文件到此处上传'}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              或点击选择文件 (最大 {maxFiles} 个文件，每个文件最大 10MB)
+              或点击选择文件 (最大 {maxFiles} 个文件，图片最大 5MB，其他文件最大 10MB)
             </p>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
               支持: 图片 (JPG, PNG, GIF, WebP), 文档 (PDF, DOC, DOCX, TXT, MD), 压缩包 (ZIP)
@@ -259,24 +259,89 @@ export function FileUpload({
                   <div className="flex items-center space-x-2">
                     {uploadingFile.status === 'uploading' && (
                       <div className="flex items-center space-x-2">
-                        <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2 relative overflow-hidden">
                           <div 
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300 relative"
                             style={{ width: `${uploadingFile.progress}%` }}
-                          />
+                          >
+                            <div className="absolute inset-0 bg-white opacity-30 animate-pulse rounded-full" />
+                          </div>
                         </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-blue-600 dark:text-blue-400 font-medium min-w-[3rem]">
                           {uploadingFile.progress}%
                         </span>
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-500 border-t-transparent" />
                       </div>
                     )}
                     
                     {uploadingFile.status === 'completed' && (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                          上传成功
+                        </span>
+                        {uploadingFile.result?.compressionRatio && uploadingFile.result.compressionRatio > 0 && (
+                          <span className="text-xs text-green-600 dark:text-green-400">
+                            (压缩 {uploadingFile.result.compressionRatio}%)
+                          </span>
+                        )}
+                      </div>
                     )}
                     
                     {uploadingFile.status === 'error' && (
-                      <AlertCircle className="h-5 w-5 text-red-500" />
+                      <div className="flex items-center space-x-2">
+                        <AlertCircle className="h-5 w-5 text-red-500" />
+                        <span className="text-xs text-red-600 dark:text-red-400 font-medium">
+                          上传失败
+                        </span>
+                        <button
+                          onClick={() => {
+                            // 重试上传
+                            const fileIndex = uploadingFiles.findIndex((_, i) => i === uploadingFiles.indexOf(uploadingFile))
+                            if (fileIndex !== -1) {
+                              setUploadingFiles(prev => {
+                                const updated = [...prev]
+                                updated[fileIndex] = {
+                                  ...updated[fileIndex],
+                                  status: 'uploading',
+                                  progress: 0,
+                                  error: undefined
+                                }
+                                return updated
+                              })
+                                            
+                              // 重新上传
+                              uploadFile(uploadingFile.file)
+                                .then(result => {
+                                  setUploadingFiles(prev => {
+                                    const updated = [...prev]
+                                    updated[fileIndex] = {
+                                      ...updated[fileIndex],
+                                      status: 'completed',
+                                      progress: 100,
+                                      result
+                                    }
+                                    return updated
+                                  })
+                                })
+                                .catch(error => {
+                                  setUploadingFiles(prev => {
+                                    const updated = [...prev]
+                                    updated[fileIndex] = {
+                                      ...updated[fileIndex],
+                                      status: 'error',
+                                      error: error instanceof Error ? error.message : '上传失败'
+                                    }
+                                    return updated
+                                  })
+                                })
+                            }
+                          }}
+                          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          重试
+                        </button>
+                      </div>
                     )}
 
                     <button
@@ -289,7 +354,20 @@ export function FileUpload({
                 </div>
 
                 {uploadingFile.error && (
-                  <p className="text-xs text-red-500 mt-2">{uploadingFile.error}</p>
+                  <div className="mt-2 p-2 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded">
+                    <p className="text-xs text-red-600 dark:text-red-400">
+                      <strong>错误详情:</strong> {uploadingFile.error}
+                    </p>
+                    <div className="mt-1 text-xs text-red-500 dark:text-red-400">
+                      可能的解决方案:
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>检查文件大小是否超限</li>
+                        <li>确认文件格式支持</li>
+                        <li>检查网络连接</li>
+                        <li>稍后重试</li>
+                      </ul>
+                    </div>
+                  </div>
                 )}
               </motion.div>
             ))}

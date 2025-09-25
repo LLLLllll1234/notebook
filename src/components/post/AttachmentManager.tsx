@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { File, Image, FileText, Download, Trash2, ExternalLink } from 'lucide-react'
 import { AttachmentData } from '@/lib/types/types'
+import { ImagePreview } from '@/components/ui/ImagePreview'
 import toast from 'react-hot-toast'
 
 interface AttachmentManagerProps {
@@ -24,6 +25,7 @@ export function AttachmentManager({
   const [attachments, setAttachments] = useState<AttachmentData[]>(initialAttachments || [])
   const [loading, setLoading] = useState(!initialAttachments)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [previewImage, setPreviewImage] = useState<AttachmentData | null>(null)
 
   useEffect(() => {
     if (!initialAttachments) {
@@ -164,21 +166,48 @@ export function AttachmentManager({
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                       {formatFileSize(attachment.fileSize)}
                     </span>
+                    {attachment.compressedSize && attachment.compressedSize < attachment.fileSize && (
+                      <>
+                        <span className="text-xs text-gray-400">→</span>
+                        <span className="text-xs text-green-600 dark:text-green-400">
+                          {formatFileSize(attachment.compressedSize)}
+                        </span>
+                        <span className="text-xs text-green-600 dark:text-green-400">
+                          (-{Math.round(((attachment.fileSize - attachment.compressedSize) / attachment.fileSize) * 100)}%)
+                        </span>
+                      </>
+                    )}
                     <span className="text-xs text-gray-400">•</span>
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                       {formatDate(attachment.uploadedAt)}
                     </span>
                   </div>
                   
-                  {/* Image Preview */}
+                  {/* Image Preview with Thumbnail Support */}
                   {attachment.mimeType.startsWith('image/') && (
                     <div className="mt-2">
                       <img
-                        src={attachment.filePath}
+                        src={attachment.thumbnailPath || attachment.filePath}
                         alt={attachment.originalName}
-                        className="h-20 w-20 object-cover rounded border"
+                        className="h-20 w-20 object-cover rounded border hover:h-32 hover:w-32 transition-all duration-200 cursor-pointer"
                         loading="lazy"
+                        onClick={() => {
+                          // Open image preview
+                          setPreviewImage(attachment)
+                        }}
+                        onError={(e) => {
+                          // Fallback to original image if thumbnail fails
+                          const img = e.target as HTMLImageElement
+                          if (img.src !== attachment.filePath) {
+                            img.src = attachment.filePath
+                          }
+                        }}
                       />
+                      {attachment.thumbnailPath && (
+                        <p className="text-xs text-gray-400 mt-1">
+                          缩略图（点击查看大图）
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -217,6 +246,16 @@ export function AttachmentManager({
           </motion.div>
         ))}
       </AnimatePresence>
+      
+      {/* Image Preview Modal */}
+      {previewImage && (
+        <ImagePreview
+          image={previewImage}
+          isOpen={!!previewImage}
+          onClose={() => setPreviewImage(null)}
+          showEditTools={true}
+        />
+      )}
     </div>
   )
 }
