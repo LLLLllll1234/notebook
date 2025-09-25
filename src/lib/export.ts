@@ -107,7 +107,8 @@ export async function getPostsForExport(options: ExportOptions): Promise<PostWit
     include: {
       tags: {
         include: {
-          tag: true
+          tag: true,
+          post: true
         }
       }
     },

@@ -15,6 +15,8 @@ model Post {
   title     String
   slug      String   @unique
   content   String
+  isDeleted Boolean  @default(false) // 软删除标记
+  deletedAt DateTime? // 删除时间
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   tags      TagOnPost[]
@@ -66,4 +68,44 @@ model ImportExportRecord {
   createdAt    DateTime @default(now())
 
   @@map("import_export_records")
+}
+
+model UserPreferences {
+  id            String   @id @default(cuid())
+  userId        String?  // 预留用户ID字段
+  editorMode    String   @default("edit") // 'edit', 'preview', 'split'
+  toolbarLayout String?  // 工具栏布局配置(JSON字符串)
+  shortcuts     String?  // 快捷键自定义配置(JSON字符串)
+  autoSave      Boolean  @default(true) // 自动保存开关
+  tocVisible    Boolean  @default(true) // 目录显示偏好
+  tocPosition   String   @default("left") // 'left', 'right'
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("user_preferences")
+}
+
+model OperationHistory {
+  id             String    @id @default(cuid())
+  operationType  String    // 'delete', 'edit', 'bulk_delete', 'bulk_tag', etc.
+  targetIds      String    // 操作目标ID列表(JSON字符串)
+  operationData  String?   // 操作相关数据(JSON字符串)
+  canUndo        Boolean   @default(true) // 是否可撤销
+  undoExpiry     DateTime? // 撤销过期时间
+  isUndone       Boolean   @default(false) // 是否已撤销
+  createdAt      DateTime  @default(now())
+
+  @@map("operation_history")
+}
+
+model DraftSave {
+  id        String    @id @default(cuid())
+  postId    String?   // 关联笔记ID，新建时为空
+  title     String
+  content   String
+  tags      String?
+  savedAt   DateTime  @default(now())
+  expiresAt DateTime? // 草稿过期时间
+
+  @@map("draft_saves")
 }

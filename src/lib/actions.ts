@@ -142,8 +142,7 @@ export async function searchPosts(query: string) {
           some: {
             tag: {
               name: {
-                contains: tagName,
-                mode: 'insensitive'
+                contains: tagName
               }
             }
           }
@@ -168,14 +167,12 @@ export async function searchPosts(query: string) {
       OR: [
         {
           title: {
-            contains: query,
-            mode: 'insensitive'
+            contains: query
           }
         },
         {
           content: {
-            contains: query,
-            mode: 'insensitive'
+            contains: query
           }
         }
       ]

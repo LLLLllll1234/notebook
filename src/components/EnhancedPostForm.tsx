@@ -276,28 +276,28 @@ export function EnhancedPostForm({ action, initialData }: EnhancedPostFormProps)
     <div className={`${isFullscreen ? 'fixed inset-0 z-50 bg-white dark:bg-gray-900' : ''}`}>
       <div className={`space-y-6 ${isFullscreen ? 'h-full p-6 overflow-auto' : ''}`}>
         {/* Header */}
-        <div className=\"flex items-center justify-between\">
-          <h1 className=\"text-2xl font-bold text-gray-900 dark:text-gray-100\">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             {initialData?.id ? '编辑笔记' : '新建笔记'}
           </h1>
           
-          <div className=\"flex items-center space-x-2\">
+          <div className="flex items-center space-x-2">
             <button
-              type=\"button\"
+              type="button"
               onClick={() => setShowSearch(!showSearch)}
-              className=\"p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors rounded\"
-              title=\"搜索 (Ctrl+F)\"
+              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors rounded"
+              title="搜索 (Ctrl+F)"
             >
-              <Search className=\"h-4 w-4\" />
+              <Search className="h-4 w-4" />
             </button>
             
             <button
-              type=\"button\"
+              type="button"
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className=\"p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors rounded\"
-              title=\"全屏模式\"
+              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors rounded"
+              title="全屏模式"
             >
-              <Maximize2 className=\"h-4 w-4\" />
+              <Maximize2 className="h-4 w-4" />
             </button>
           </div>
         </div>
@@ -309,123 +309,123 @@ export function EnhancedPostForm({ action, initialData }: EnhancedPostFormProps)
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className=\"bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3\"
+              className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3"
             >
               <input
-                type=\"text\"
+                type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder=\"搜索内容...\"
-                className=\"w-full px-3 py-1 text-sm border border-yellow-300 dark:border-yellow-700 rounded bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500\"
+                placeholder="搜索内容..."
+                className="w-full px-3 py-1 text-sm border border-yellow-300 dark:border-yellow-700 rounded bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 autoFocus
               />
             </motion.div>
           )}
         </AnimatePresence>
 
-        <form action={handleSubmit} className=\"space-y-6\">
+        <form action={handleSubmit} className="space-y-6">
           {/* Title Input */}
           <div>
-            <label htmlFor=\"title\" className=\"block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2\">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               标题
             </label>
             <input
-              type=\"text\"
-              id=\"title\"
-              name=\"title\"
+              type="text"
+              id="title"
+              name="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className=\"w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-800\"
-              placeholder=\"输入笔记标题...\"
+              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-800"
+              placeholder="输入笔记标题..."
             />
           </div>
 
           {/* Tags Input */}
           <div>
-            <label htmlFor=\"tags\" className=\"block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2\">
+            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               标签
             </label>
             <input
-              type=\"text\"
-              id=\"tags\"
-              name=\"tags\"
+              type="text"
+              id="tags"
+              name="tags"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className=\"w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-800\"
-              placeholder=\"标签1, 标签2, 标签3 (用逗号分隔)\"
+              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-800"
+              placeholder="标签1, 标签2, 标签3 (用逗号分隔)"
             />
           </div>
 
           {/* Editor Toolbar */}
-          <div className=\"border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden\">
-            <div className=\"bg-gray-50 dark:bg-gray-800 px-4 py-2 border-b border-gray-200 dark:border-gray-700\">
-              <div className=\"flex items-center justify-between\">
-                <div className=\"flex items-center space-x-1\">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+            <div className="bg-gray-50 dark:bg-gray-800 px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-1">
                   {/* History Controls */}
                   <button
-                    type=\"button\"
+                    type="button"
                     onClick={undo}
                     disabled={historyIndex === 0}
-                    className=\"p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded\"
-                    title=\"撤销 (Ctrl+Z)\"
+                    className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded"
+                    title="撤销 (Ctrl+Z)"
                   >
-                    <RotateCcw className=\"h-4 w-4\" />
+                    <RotateCcw className="h-4 w-4" />
                   </button>
                   
                   <button
-                    type=\"button\"
+                    type="button"
                     onClick={redo}
                     disabled={historyIndex >= history.length - 1}
-                    className=\"p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded\"
-                    title=\"重做 (Ctrl+Y)\"
+                    className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded"
+                    title="重做 (Ctrl+Y)"
                   >
-                    <RotateCw className=\"h-4 w-4\" />
+                    <RotateCw className="h-4 w-4" />
                   </button>
 
-                  <div className=\"h-4 w-px bg-gray-300 dark:bg-gray-600 mx-2\" />
+                  <div className="h-4 w-px bg-gray-300 dark:bg-gray-600 mx-2" />
 
                   {/* Formatting Tools */}
                   {editorActions.map((actionItem, index) => (
-                    <div key={index} className=\"flex items-center\">
+                    <div key={index} className="flex items-center">
                       <button
-                        type=\"button\"
+                        type="button"
                         onClick={actionItem.action}
-                        className=\"p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors rounded\"
+                        className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors rounded"
                         title={`${actionItem.label}${actionItem.shortcut ? ` (${actionItem.shortcut})` : ''}`}
                       >
-                        <actionItem.icon className=\"h-4 w-4\" />
+                        <actionItem.icon className="h-4 w-4" />
                       </button>
                       {actionItem.separator && (
-                        <div className=\"h-4 w-px bg-gray-300 dark:bg-gray-600 mx-2\" />
+                        <div className="h-4 w-px bg-gray-300 dark:bg-gray-600 mx-2" />
                       )}
                     </div>
                   ))}
                 </div>
 
-                <div className=\"flex items-center space-x-2\">
+                <div className="flex items-center space-x-2">
                   <button
-                    type=\"button\"
+                    type="button"
                     onClick={() => setShowAttachments(!showAttachments)}
-                    className=\"inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors px-2 py-1 rounded\"
+                    className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors px-2 py-1 rounded"
                   >
-                    <Paperclip className=\"h-4 w-4\" />
+                    <Paperclip className="h-4 w-4" />
                     <span>附件 ({attachments.length})</span>
                   </button>
                   
                   <button
-                    type=\"button\"
+                    type="button"
                     onClick={() => setIsPreview(!isPreview)}
-                    className=\"inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors\"
+                    className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors"
                   >
                     {isPreview ? (
                       <>
-                        <EyeOff className=\"h-4 w-4\" />
+                        <EyeOff className="h-4 w-4" />
                         <span>编辑</span>
                       </>
                     ) : (
                       <>
-                        <Eye className=\"h-4 w-4\" />
+                        <Eye className="h-4 w-4" />
                         <span>预览</span>
                       </>
                     )}
@@ -441,12 +441,12 @@ export function EnhancedPostForm({ action, initialData }: EnhancedPostFormProps)
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className=\"p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50\"
+                  className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50"
                 >
                   <FileUpload
                     onUploadComplete={handleUploadComplete}
                     postId={initialData?.id}
-                    className=\"mb-4\"
+                    className="mb-4"
                   />
                   
                   {attachments.length > 0 && (
@@ -460,29 +460,29 @@ export function EnhancedPostForm({ action, initialData }: EnhancedPostFormProps)
             </AnimatePresence>
 
             {/* Editor/Preview Area */}
-            <div className=\"relative\">
+            <div className="relative">
               {isPreview ? (
                 <motion.div
-                  key=\"preview\"
+                  key="preview"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className=\"min-h-[400px] p-4 bg-white dark:bg-gray-900\"
+                  className="min-h-[400px] p-4 bg-white dark:bg-gray-900"
                 >
-                  <div className=\"prose prose-gray dark:prose-invert max-w-none\">
+                  <div className="prose prose-gray dark:prose-invert max-w-none">
                     <MarkdownRenderer content={content} />
                   </div>
                 </motion.div>
               ) : (
                 <motion.div
-                  key=\"editor\"
+                  key="editor"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className=\"relative\"
+                  className="relative"
                 >
                   <textarea
                     ref={textareaRef}
-                    id=\"content\"
-                    name=\"content\"
+                    id="content"
+                    name="content"
                     value={content}
                     onChange={(e) => {
                       setContent(e.target.value)
@@ -493,12 +493,12 @@ export function EnhancedPostForm({ action, initialData }: EnhancedPostFormProps)
                     onClick={updateCursorPosition}
                     required
                     rows={isFullscreen ? 30 : 20}
-                    className=\"w-full border-0 px-4 py-3 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 font-mono resize-none focus:outline-none\"
-                    placeholder=\"在这里用 Markdown 格式编写你的笔记内容...\"
+                    className="w-full border-0 px-4 py-3 text-sm bg-white dark:bg-gray-900 dark:text-gray-100 font-mono resize-none focus:outline-none"
+                    placeholder="在这里用 Markdown 格式编写你的笔记内容..."
                   />
                   
                   {/* Word Count */}
-                  <div className=\"absolute bottom-2 right-2 text-xs text-gray-400 bg-white dark:bg-gray-900 px-2 py-1 rounded\">
+                  <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-white dark:bg-gray-900 px-2 py-1 rounded">
                     {content.length} 字符 | {content.split(/\\s+/).filter(Boolean).length} 词
                   </div>
                 </motion.div>
@@ -507,17 +507,17 @@ export function EnhancedPostForm({ action, initialData }: EnhancedPostFormProps)
           </div>
 
           {/* Submit Area */}
-          <div className=\"flex items-center justify-between\">
-            <div className=\"text-sm text-gray-500 dark:text-gray-400\">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-500 dark:text-gray-400">
               支持 Markdown 语法，包括代码高亮、表格、链接等
             </div>
             
             <button
-              type=\"submit\"
+              type="submit"
               disabled={isSubmitting || !title.trim() || !content.trim()}
-              className=\"inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium transition-colors\"
+              className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
-              <Save className=\"h-4 w-4\" />
+              <Save className="h-4 w-4" />
               <span>{isSubmitting ? '保存中...' : '保存笔记'}</span>
             </button>
           </div>

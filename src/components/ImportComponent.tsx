@@ -12,13 +12,7 @@ interface ImportComponentProps {
   className?: string
 }
 
-interface ImportResult {
-  recordId: string
-  itemCount: number
-  createdPosts: string[]
-  message: string
-  errors: string[]
-}
+type ImportResult = NonNullable<ImportResponse['data']>
 
 const acceptedFiles = {
   'text/markdown': ['.md'],
@@ -66,10 +60,10 @@ export function ImportComponent({ onImportComplete, className = '' }: ImportComp
       setShowResult(true)
       
       if (result.createdPosts.length > 0) {
-        toast.success(result.message)
+        toast.success(`成功导入 ${result.createdPosts.length} 篇笔记`)
         onImportComplete?.(result)
       } else {
-        toast.error(result.message)
+        toast.error('没有成功导入任何笔记')
       }
       
     } catch (error) {
@@ -148,19 +142,19 @@ export function ImportComponent({ onImportComplete, className = '' }: ImportComp
       </div>
 
       {/* Drop Zone */}
-      <motion.div
-        {...getRootProps()}
-        className={`
-          relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
-          ${isDragActive
-            ? 'border-green-500 bg-green-50 dark:bg-green-950/20' 
-            : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
-          }
-          ${isImporting ? 'opacity-50 cursor-not-allowed' : ''}
-        `}
-        whileHover={!isImporting ? { scale: 1.01 } : {}}
-        whileTap={!isImporting ? { scale: 0.99 } : {}}
-      >
+      <div {...getRootProps()}>
+        <motion.div
+          className={`
+            relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
+            ${isDragActive
+              ? 'border-green-500 bg-green-50 dark:bg-green-950/20' 
+              : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
+            }
+            ${isImporting ? 'opacity-50 cursor-not-allowed' : ''}
+          `}
+          whileHover={!isImporting ? { scale: 1.01 } : {}}
+          whileTap={!isImporting ? { scale: 0.99 } : {}}
+        >
         <input {...getInputProps()} disabled={isImporting} />
         
         <motion.div
@@ -191,7 +185,8 @@ export function ImportComponent({ onImportComplete, className = '' }: ImportComp
             </p>
           </div>
         </motion.div>
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Import Progress */}
       {isImporting && (
@@ -254,7 +249,7 @@ export function ImportComponent({ onImportComplete, className = '' }: ImportComp
                       ? 'text-green-800 dark:text-green-200'
                       : 'text-red-800 dark:text-red-200'
                   }`}>
-                    {importResult.message}
+                    成功导入 {importResult.createdPosts.length} 篇笔记
                   </p>
                   
                   {importResult.createdPosts.length > 0 && (
@@ -281,23 +276,11 @@ export function ImportComponent({ onImportComplete, className = '' }: ImportComp
                     </div>
                   )}
                   
-                  {importResult.errors.length > 0 && (
+                  {importResult.itemCount > importResult.createdPosts.length && (
                     <div className="mt-2">
-                      <p className="text-xs text-red-600 dark:text-red-400 mb-1">
-                        错误详情:
+                      <p className="text-xs text-yellow-600 dark:text-yellow-400 mb-1">
+                        部分导入: 共 {importResult.itemCount} 个项目，成功 {importResult.createdPosts.length} 个
                       </p>
-                      <div className="space-y-1">
-                        {importResult.errors.slice(0, 3).map((error, index) => (
-                          <p key={index} className="text-xs text-red-700 dark:text-red-300">
-                            • {error}
-                          </p>
-                        ))}
-                        {importResult.errors.length > 3 && (
-                          <p className="text-xs text-red-600 dark:text-red-400">
-                            ...还有 {importResult.errors.length - 3} 个错误
-                          </p>
-                        )}
-                      </div>
                     </div>
                   )}
                 </div>

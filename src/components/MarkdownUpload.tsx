@@ -197,7 +197,7 @@ export function MarkdownUpload({
     multiple: true
   })
 
-  const useFile = (file: ProcessedFile) => {
+  const handleUseFile = (file: ProcessedFile) => {
     if (file.status === 'completed') {
       onFileProcessed?.(file)
       toast.success(`已导入 "${file.title}"`)
@@ -330,7 +330,7 @@ export function MarkdownUpload({
                   <div className="flex items-center space-x-2 ml-4">
                     {file.status === 'completed' && (
                       <button
-                        onClick={() => useFile(file)}
+                        onClick={() => handleUseFile(file)}
                         className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                       >
                         使用此文件

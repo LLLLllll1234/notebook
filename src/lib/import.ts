@@ -59,7 +59,7 @@ export async function parseMarkdownFile(content: string, fileName: string): Prom
   const frontMatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/
   const match = content.match(frontMatterRegex)
   
-  let title: string
+  let title: string | undefined
   let tags: string[] = []
   let actualContent: string
   let createdAt: Date | undefined

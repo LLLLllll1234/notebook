@@ -183,19 +183,19 @@ export function FileUpload({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Drop Zone */}
-      <motion.div
-        {...getRootProps()}
-        className={`
-          relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
-          ${(isDragActive || dropzoneActive)
-            ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20' 
-            : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
-          }
-          ${uploadingFiles.length > 0 ? 'bg-gray-50 dark:bg-gray-800/50' : ''}
-        `}
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
-      >
+      <div {...getRootProps()}>
+        <motion.div
+          className={`
+            relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
+            ${(isDragActive || dropzoneActive)
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20' 
+              : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
+            }
+            ${uploadingFiles.length > 0 ? 'bg-gray-50 dark:bg-gray-800/50' : ''}
+          `}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+        >
         <input {...getInputProps()} />
         
         <motion.div
@@ -219,7 +219,8 @@ export function FileUpload({
             </p>
           </div>
         </motion.div>
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Uploading Files List */}
       <AnimatePresence>

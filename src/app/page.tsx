@@ -22,8 +22,7 @@ export default async function HomePage({
             some: {
               tag: {
                 name: {
-                  contains: tagName,
-                  mode: 'insensitive'
+                  contains: tagName
                 }
               }
             }
@@ -32,7 +31,8 @@ export default async function HomePage({
         include: {
           tags: {
             include: {
-              tag: true
+              tag: true,
+              post: true
             }
           }
         },
@@ -46,14 +46,12 @@ export default async function HomePage({
           OR: [
             {
               title: {
-                contains: query,
-                mode: 'insensitive'
+                contains: query
               }
             },
             {
               content: {
-                contains: query,
-                mode: 'insensitive'
+                contains: query
               }
             }
           ]
@@ -61,7 +59,8 @@ export default async function HomePage({
         include: {
           tags: {
             include: {
-              tag: true
+              tag: true,
+              post: true
             }
           }
         },
@@ -75,7 +74,8 @@ export default async function HomePage({
       include: {
         tags: {
           include: {
-            tag: true
+            tag: true,
+            post: true
           }
         }
       },

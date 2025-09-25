@@ -1,27 +1,99 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
 import { formatDate } from '@/lib/utils'
 import { Plus, Edit, Calendar, Tag, Upload, Download, FileText } from 'lucide-react'
+import { PostList } from '@/components/PostList'
+import { BulkOperationToolbar } from '@/components/BulkOperationToolbar'
+import { PostWithTags } from '@/lib/types'
+import { useSelectionStore } from '@/lib/stores'
+import toast, { Toaster } from 'react-hot-toast'
 
-export default async function DashboardPage() {
-  const posts = await prisma.post.findMany({
-    include: {
-      tags: {
-        include: {
-          tag: true
-        }
-      }
-    },
-    orderBy: {
-      updatedAt: 'desc'
-    }
+export default function DashboardPage() {
+  const [posts, setPosts] = useState<PostWithTags[]>([])
+  const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState({
+    totalPosts: 0,
+    totalTags: 0,
+    monthlyUpdates: 0
   })
+  const { clearSelection } = useSelectionStore()
 
-  const totalPosts = posts.length
-  const totalTags = await prisma.tag.count()
+  // 获取数据
+  const fetchData = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch('/api/posts')
+      if (response.ok) {
+        const data = await response.json()
+        setPosts(data.posts || [])
+        
+        // 使用API返回的统计数据
+        const totalPosts = data.stats?.totalPosts || data.posts?.length || 0
+        const totalTags = data.stats?.totalTags || 0
+        const monthlyUpdates = data.posts?.filter((post: any) => {
+          const postDate = new Date(post.updatedAt)
+          const now = new Date()
+          return postDate.getMonth() === now.getMonth() && 
+                 postDate.getFullYear() === now.getFullYear()
+        }).length || 0
+        
+        setStats({
+          totalPosts,
+          totalTags,
+          monthlyUpdates
+        })
+      } else {
+        console.error('API返回错误:', response.status)
+        toast.error('加载数据失败')
+      }
+    } catch (error) {
+      console.error('获取数据失败:', error)
+      toast.error('加载数据失败')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+    // 清理选择状态
+    return () => clearSelection()
+  }, [])
+
+  const handlePostsChange = () => {
+    fetchData()
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div className="animate-pulse">
+          <div className="h-8 bg-zinc-200 dark:bg-zinc-700 rounded w-1/3 mb-2"></div>
+          <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-1/4"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6">
+              <div className="animate-pulse flex items-center space-x-3">
+                <div className="bg-zinc-200 dark:bg-zinc-700 rounded-lg w-10 h-10"></div>
+                <div className="flex-1">
+                  <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-1/2 mb-2"></div>
+                  <div className="h-6 bg-zinc-200 dark:bg-zinc-700 rounded w-1/3"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8">
+      <Toaster position="top-right" />
+      
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
@@ -61,7 +133,7 @@ export default async function DashboardPage() {
             <div>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">总笔记数</p>
               <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                {totalPosts}
+                {stats.totalPosts}
               </p>
             </div>
           </div>
@@ -75,7 +147,7 @@ export default async function DashboardPage() {
             <div>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">标签数量</p>
               <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                {totalTags}
+                {stats.totalTags}
               </p>
             </div>
           </div>
@@ -89,17 +161,15 @@ export default async function DashboardPage() {
             <div>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">本月更新</p>
               <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                {posts.filter(post => {
-                  const postDate = new Date(post.updatedAt)
-                  const now = new Date()
-                  return postDate.getMonth() === now.getMonth() && 
-                         postDate.getFullYear() === now.getFullYear()
-                }).length}
+                {stats.monthlyUpdates}
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* 批量操作工具栏 */}
+      <BulkOperationToolbar posts={posts} onPostsChange={handlePostsChange} />
 
       {/* Posts List */}
       <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-700">
@@ -140,52 +210,8 @@ export default async function DashboardPage() {
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-zinc-200 dark:divide-zinc-700">
-            {posts.map((post) => (
-              <div key={post.id} className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 space-y-2">
-                    <Link
-                      href={`/post/${post.slug}`}
-                      className="text-lg font-medium text-zinc-900 dark:text-zinc-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                    >
-                      {post.title}
-                    </Link>
-                    
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
-                      <div className="flex items-center space-x-1">
-                        <Calendar className="h-4 w-4" />
-                        <span>{formatDate(new Date(post.updatedAt))}</span>
-                      </div>
-
-                      {post.tags.length > 0 && (
-                        <div className="flex items-center space-x-2">
-                          <Tag className="h-4 w-4" />
-                          <div className="flex flex-wrap gap-1">
-                            {post.tags.map((tagOnPost) => (
-                              <span
-                                key={tagOnPost.tag.id}
-                                className="inline-block bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2 py-1 rounded text-xs"
-                              >
-                                #{tagOnPost.tag.name}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <Link
-                    href={`/dashboard/edit/${post.id}`}
-                    className="ml-4 inline-flex items-center space-x-1 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
-                  >
-                    <Edit className="h-4 w-4" />
-                    <span>编辑</span>
-                  </Link>
-                </div>
-              </div>
-            ))}
+          <div className="p-6">
+            <PostList posts={posts} />
           </div>
         )}
       </div>

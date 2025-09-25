@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Save, Eye, EyeOff, Paperclip } from 'lucide-react'
-import { MarkdownRenderer } from './MarkdownRenderer'
+import { Save, Paperclip } from 'lucide-react'
+import { EnhancedEditor } from './EnhancedEditor'
 import { FileUpload } from './FileUpload'
 import { AttachmentManager } from './AttachmentManager'
 import { MarkdownUpload } from './MarkdownUpload'
@@ -24,7 +24,6 @@ export function PostForm({ action, initialData }: PostFormProps) {
   const [title, setTitle] = useState(initialData?.title || '')
   const [content, setContent] = useState(initialData?.content || '')
   const [tags, setTags] = useState(initialData?.tags || '')
-  const [isPreview, setIsPreview] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showAttachments, setShowAttachments] = useState(false)
   const [showMarkdownUpload, setShowMarkdownUpload] = useState(false)
@@ -40,6 +39,14 @@ export function PostForm({ action, initialData }: PostFormProps) {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const handleSave = () => {
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('content', content)
+    formData.append('tags', tags)
+    handleSubmit(formData)
   }
 
   const handleUploadComplete = (newFiles: AttachmentData[]) => {
@@ -77,6 +84,7 @@ export function PostForm({ action, initialData }: PostFormProps) {
       <Toaster position="top-right" />
       
       <form action={handleSubmit} className="space-y-6">
+        {/* 标题输入 */}
         <div>
           <label
             htmlFor="title"
@@ -96,6 +104,7 @@ export function PostForm({ action, initialData }: PostFormProps) {
           />
         </div>
 
+        {/* 标签输入 */}
         <div>
           <label
             htmlFor="tags"
@@ -114,8 +123,9 @@ export function PostForm({ action, initialData }: PostFormProps) {
           />
         </div>
 
+        {/* 内容编辑区域 */}
         <div>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-4">
             <label
               htmlFor="content"
               className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
@@ -139,24 +149,6 @@ export function PostForm({ action, initialData }: PostFormProps) {
               >
                 <Paperclip className="h-4 w-4" />
                 <span>附件 ({attachments.length})</span>
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => setIsPreview(!isPreview)}
-                className="inline-flex items-center space-x-1 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
-              >
-                {isPreview ? (
-                  <>
-                    <EyeOff className="h-4 w-4" />
-                    <span>编辑模式</span>
-                  </>
-                ) : (
-                  <>
-                    <Eye className="h-4 w-4" />
-                    <span>预览模式</span>
-                  </>
-                )}
               </button>
             </div>
           </div>
@@ -206,34 +198,18 @@ export function PostForm({ action, initialData }: PostFormProps) {
             )}
           </AnimatePresence>
 
-          {isPreview ? (
-            <motion.div
-              key="preview"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="min-h-[400px] rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900"
-            >
-              <div className="prose prose-zinc dark:prose-invert max-w-none">
-                <MarkdownRenderer content={content} />
-              </div>
-            </motion.div>
-          ) : (
-            <motion.textarea
-              key="editor"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              id="content"
-              name="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              required
-              rows={20}
-              className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm placeholder:text-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:focus:border-blue-400 dark:focus:ring-blue-800 font-mono"
-              placeholder="在这里用 Markdown 格式编写你的笔记内容..."
-            />
-          )}
+          {/* 增强编辑器 */}
+          <EnhancedEditor
+            value={content}
+            onChange={setContent}
+            onSave={handleSave}
+            placeholder="在这里用 Markdown 格式编写你的笔记内容..."
+            autoSave={true}
+            autoSaveInterval={30000}
+          />
         </div>
 
+        {/* 底部操作栏 */}
         <div className="flex items-center justify-between">
           <div className="text-sm text-zinc-500 dark:text-zinc-400">
             支持 Markdown 语法，包括代码高亮、表格、链接等
