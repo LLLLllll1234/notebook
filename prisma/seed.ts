@@ -162,8 +162,13 @@ Hooks 让 React 组件更加简洁和可复用！`,
 
   // Create posts with tags
   for (const postData of samplePosts) {
-    const post = await prisma.post.create({
-      data: {
+    const post = await prisma.post.upsert({
+      where: { slug: postData.slug },
+      update: {
+        title: postData.title,
+        content: postData.content,
+      },
+      create: {
         title: postData.title,
         slug: postData.slug,
         content: postData.content,
